@@ -7,8 +7,10 @@ class NegociacaoController {
 		this._inputValor = $('#valor');
 		this._listaNegociacoes = new ListaNegociacoes();
 		this._view = new NegociacoesView($('#neg-table'));
+		this._messageView = new MensagemView($('#mensagem'));
 
 		this._view.update(this._listaNegociacoes.negociacoes);
+		this._messageView.update(new Mensagem());
 	}
 
 	adiciona(event) {
@@ -16,6 +18,7 @@ class NegociacaoController {
 
 		this._listaNegociacoes.adiciona(this._criaNegociacao());
 		this._view.update(this._listaNegociacoes.negociacoes);
+		this._messageView.update(new Mensagem("Cadastrador com sucesso."));
 		this._limpaFormulario();
 	}
 
