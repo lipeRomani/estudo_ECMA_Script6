@@ -5,23 +5,28 @@ class NegociacaoController {
 		this._inputData = $('#data');
 		this._inputQuantidade = $('#quantidade');
 		this._inputValor = $('#valor');
-		this._listaNegociacoes = new ListaNegociacoes();
+
 		this._view = new NegociacoesView($('#neg-table'));
 		this._messageView = new MensagemView($('#mensagem'));
 
+		this._listaNegociacoes = new ListaNegociacoes((model, message) => {
+			this._view.update(model);
+			this._messageView.update(new Mensagem(message));
+		});
+
 		this._view.update(this._listaNegociacoes.negociacoes);
-		this._messageView.update(new Mensagem());
+		
 	}
 
 	adiciona(event) {
 		event.preventDefault();
-
 		this._listaNegociacoes.adiciona(this._criaNegociacao());
-		this._view.update(this._listaNegociacoes.negociacoes);
-		this._messageView.update(new Mensagem("Cadastrador com sucesso."));
 		this._limpaFormulario();
 	}
 
+	limpar() {
+		this._listaNegociacoes.clear();
+	}
 
 	_criaNegociacao() {
 		return new Negociacao(
