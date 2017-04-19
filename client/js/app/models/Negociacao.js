@@ -17,10 +17,10 @@ class Negociacao {
   }
 
   get quantidade() {
-    return this._valor;
+    return this._quantidade;
   }
 
   get valor() {
-    return this._quantidade;
+    return this._valor;
   }
 }
