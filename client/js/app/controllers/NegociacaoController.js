@@ -6,16 +6,8 @@ class NegociacaoController {
 		this._inputQuantidade = $('#quantidade');
 		this._inputValor = $('#valor');
 
-		//this._viewNeg = 
-		//this._messageView = ;
-
-		//this._listaNegociacoes = ProxyFactory.create(new ListaNegociacoes(), ['adiciona', 'clear'] ,model => this._viewNeg.update(model));
-		//this._viewNeg.update(this._listaNegociacoes);
 		this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView($('#neg-table')), "adiciona", "clear");
-		this._message = new Bind(new Mensagem(), new MensagemView($('#mensagem')), 'text');
-		//this._message = ProxyFactory.create(new Mensagem(), ['text'], model => this._messageView.update(model));
-		//this._messageView.update(this._message);	
-				
+		this._message = new Bind(new Mensagem(), new MensagemView($('#mensagem')), 'text');	
 	}
 
 	adiciona(event) {
@@ -23,6 +15,19 @@ class NegociacaoController {
 		this._listaNegociacoes.adiciona(this._criaNegociacao());
 		this._message.text = "Criado com sucesso.";
 		this._limpaFormulario();
+	}
+
+	importa() {
+		let service = new NegociacaoService();
+
+		service.importaSemana( (err, negociacoes) => {
+			if (err) {
+				this._message.text = `correu um erro: ${err}`;
+				return; 
+			}
+			negociacoes.forEach( neg  => this._listaNegociacoes.adiciona(neg));
+			this._message.text = "Negociações importadas com sucesso";
+		});
 	}
 
 	limpar() {
