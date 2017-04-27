@@ -1,23 +1,53 @@
 class NegociacaoService {
 
-    importaSemana(callback) {
+    constructor(httpService) {
+        this._httpService = httpService;
+    }
 
-        let xhr = new XMLHttpRequest()
-        xhr.open("GET", "/negociacoes/semana");
+    importaSemana() {
+            return this._httpService.get("/negociacoes/semana")
+                .then((data) => {
+                    return data.map((element) => new Negociacao(new Date(element.data), element.quantidade, element.valor));
+                })
+                .catch((err) => {
+                    throw new Error(err);
+                });
+    }
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    let negociacoes = JSON.parse(xhr.responseText)
-                        .map( (obj) => new Negociacao(new Date(obj.data), obj.quantidade, obj.valor) );
-                    callback(null, negociacoes);
-                } else {
-                    callback("Erro ao importar", null);
-                }
-            }
-        }
+    importaSemanaAnterior() {
+        
+           return this._httpService.get("/negociacoes/anterior")
+                .then(dataArray => {
+                    return dataArray.map((element) => new Negociacao(new Date(element.data), element.quantidade, element.valor));
+                })
+                .catch(err => {
+                    throw new Error(err)
+                });
+    }
 
-        xhr.send();
+    importaSemanaRetrasada() {
+            return this._httpService.get("/negociacoes/retrasada")
+                .then(dataArray => {
+                    return dataArray.map(element => new Negociacao(new Date(element.data), element.quantidade, element.valor));
+                })
+                .catch(err => {
+                    throw new Error(err);
+                });
+    }
+
+    obterNegociacoes() {
+        return Promise.all([
+			this.importaSemana(),
+			this.importaSemanaAnterior(),
+			this.importaSemanaRetrasada()
+		])
+		.then(dataArray => {
+			return dataArray
+				.reduce((newArray, array) => newArray.concat(array), []);
+		})
+		.catch(err => {
+            throw new Error(err);
+        });
     }
 
 }

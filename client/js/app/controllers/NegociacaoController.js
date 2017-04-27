@@ -8,6 +8,7 @@ class NegociacaoController {
 
 		this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView($('#neg-table')), "adiciona", "clear");
 		this._message = new Bind(new Mensagem(), new MensagemView($('#mensagem')), 'text');	
+		this._negociacaoService = new NegociacaoService(new HttpService());
 	}
 
 	adiciona(event) {
@@ -18,16 +19,15 @@ class NegociacaoController {
 	}
 
 	importa() {
-		let service = new NegociacaoService();
-
-		service.importaSemana( (err, negociacoes) => {
-			if (err) {
-				this._message.text = `correu um erro: ${err}`;
-				return; 
-			}
-			negociacoes.forEach( neg  => this._listaNegociacoes.adiciona(neg));
-			this._message.text = "Negociações importadas com sucesso";
-		});
+		this._negociacaoService
+			.obterNegociacoes()
+			.then(negociacoes => {
+				negociacoes.forEach((element) => {
+					this._listaNegociacoes.adiciona(element);
+					this._message.text = "Importação realizada com sucesso";	
+				});
+			})
+			.catch(err => this._message.text = err);
 	}
 
 	limpar() {
