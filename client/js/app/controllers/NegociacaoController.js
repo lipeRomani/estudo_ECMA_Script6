@@ -6,9 +6,11 @@ class NegociacaoController {
 		this._inputQuantidade = $('#quantidade');
 		this._inputValor = $('#valor');
 
-		this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView($('#neg-table')), "adiciona", "clear");
+		this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView($('#neg-table')), "adiciona", "clear", "ordena", "inverteOrdem");
 		this._message = new Bind(new Mensagem(), new MensagemView($('#mensagem')), 'text');	
 		this._negociacaoService = new NegociacaoService(new HttpService());
+
+		this._ordemAtual = "";
 	}
 
 	adiciona(event) {
@@ -23,6 +25,7 @@ class NegociacaoController {
 			.obterNegociacoes()
 			.then(negociacoes => {
 				negociacoes.forEach((element) => {
+					console.log(element);
 					this._listaNegociacoes.adiciona(element);
 					this._message.text = "Importação realizada com sucesso";	
 				});
@@ -32,6 +35,15 @@ class NegociacaoController {
 
 	limpar() {
 		this._listaNegociacoes.clear();
+	}
+
+	ordena(coluna) {
+		if (this._ordemAtual == coluna) {
+			this._listaNegociacoes.inverteOrdem();	
+		} else {
+			this._listaNegociacoes.ordena((a, b) => a[coluna] - b[coluna]);
+		}
+		this._ordemAtual = coluna;
 	}
 
 	_criaNegociacao() {

@@ -28,6 +28,7 @@
         <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
     </form>
     <script src="js/app/helpers/DateHelper.js"></script>
+    <script src="js/app/services/HttpService.js"></script>
     <script>
 
         function sendPost(event) {
@@ -46,27 +47,15 @@
                 valor      : valorInput.value
             };
 
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/negociacoes');
-            xhr.setRequestHeader('Content-type', 'application/json');
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        dataInput.value = '';
-                        quantidadeInput.value = 1;
-                        valorInput.value = 0.0;
-                        alert("Negociacao cadastrada com sucesso");
-                    } else {
-                        alert(`Não foi possível criar a negociação: ${xhr.responseText}`);
-                    }
-                }
-            }
-            xhr.send(JSON.stringify(jsonData));
-
-            //aqui você deve ler os dados do formulário
-            //construir o json
-            //enviar o XMLHttpRequest
+            new HttpService()
+                .post("/negociacoes", jsonData)
+                .then(message => {
+                    dataInput.value = '';
+                    quantidadeInput.value = 1;
+                    valorInput.value = 0.0;
+                    alert(message);
+                })
+                .catch(err => alert(`ERROR: ${err}`));
         }
     </script>
 </body>
