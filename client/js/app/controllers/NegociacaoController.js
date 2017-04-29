@@ -15,9 +15,14 @@ class NegociacaoController {
 
 	adiciona(event) {
 		event.preventDefault();
-		this._listaNegociacoes.adiciona(this._criaNegociacao());
-		this._message.text = "Criado com sucesso.";
-		this._limpaFormulario();
+
+		try {
+			this._listaNegociacoes.adiciona(this._criaNegociacao());
+			this._message.text = "Criado com sucesso.";
+			this._limpaFormulario();
+		} catch (err) {
+			this._message.text = err;
+		} 		
 	}
 
 	importa() {
@@ -27,7 +32,7 @@ class NegociacaoController {
 				negociacoes.forEach((element) => {
 					console.log(element);
 					this._listaNegociacoes.adiciona(element);
-					this._message.text = "Importação realizada com sucesso";	
+					this._message.text = "Importação realizada com sucesso";
 				});
 			})
 			.catch(err => this._message.text = err);
@@ -38,7 +43,7 @@ class NegociacaoController {
 	}
 
 	ordena(coluna) {
-		if (this._ordemAtual == coluna) {
+		if (this._ordemAtual === coluna) {
 			this._listaNegociacoes.inverteOrdem();	
 		} else {
 			this._listaNegociacoes.ordena((a, b) => a[coluna] - b[coluna]);
