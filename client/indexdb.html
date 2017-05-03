@@ -9,59 +9,61 @@
     <h1>Banco de dados IndexedDB</h1>
     <script src="js/app/models/Negociacao.js"></script>
     <script>
-        var openRequest = window.indexedDB.open("aulaframe", 5);
-        var db;
 
-        openRequest.onupgradeneeded = e => {
-            console.log("on update needed");
-            db = event.target.result;
-            db.deleteObjectStore("negociacoes");
-            db.createObjectStore("negociacoes", {"autoIncrement" : true});
-        }
+        window.indexedDB.deleteDatabase("aulaframe");
+        // var openRequest = window.indexedDB.open("aulaframe", 5);
+        // var db;
 
-        openRequest.onsuccess = e => {
-            console.log("on success");
-            db = openRequest.result;
-        }
+        // openRequest.onupgradeneeded = e => {
+        //     console.log("on update needed");
+        //     db = event.target.result;
+        //     db.deleteObjectStore("negociacoes");
+        //     db.createObjectStore("negociacoes", {"autoIncrement" : true});
+        // }
 
-        openRequest.onerror = e => {
-            console.log("on error");
-        }
+        // openRequest.onsuccess = e => {
+        //     console.log("on success");
+        //     db = openRequest.result;
+        // }
 
-
-        function adiciona() {
-            let objectStore = db
-            .transaction("negociacoes", 'readwrite')
-            .objectStore("negociacoes");
-
-            let requestAdd = objectStore.add(new Negociacao(new Date(), 10, 200));
-
-            requestAdd.onsuccess = e => {
-                alert("Negociacao adicionada com sucesso");
-            }
-
-            requestAdd.onerror = e => {
-                alert("erro ao inserir negociacao");
-            }
-        }
+        // openRequest.onerror = e => {
+        //     console.log("on error");
+        // }
 
 
-        function lista() {
-            let objectStore = db
-                .transaction("negociacoes", "readwrite")
-                .objectStore("negociacoes");
+        // function adiciona() {
+        //     let objectStore = db
+        //     .transaction("negociacoes", 'readwrite')
+        //     .objectStore("negociacoes");
 
-            objectStore.openCursor()
-                .onsuccess = e => {
-                    let cursor = e.target.result;
-                    if (cursor) {
-                        console.log(cursor.value);
-                        cursor.continue();
-                    } else {
-                        console.log('Fim da listagem');
-                    }
-                }
-        }
+        //     let requestAdd = objectStore.add(new Negociacao(new Date(), 10, 200));
+
+        //     requestAdd.onsuccess = e => {
+        //         alert("Negociacao adicionada com sucesso");
+        //     }
+
+        //     requestAdd.onerror = e => {
+        //         alert("erro ao inserir negociacao");
+        //     }
+        // }
+
+
+        // function lista() {
+        //     let objectStore = db
+        //         .transaction("negociacoes", "readwrite")
+        //         .objectStore("negociacoes");
+
+        //     objectStore.openCursor()
+        //         .onsuccess = e => {
+        //             let cursor = e.target.result;
+        //             if (cursor) {
+        //                 console.log(cursor.value);
+        //                 cursor.continue();
+        //             } else {
+        //                 console.log('Fim da listagem');
+        //             }
+        //         }
+        // }
 
 
     </script>
