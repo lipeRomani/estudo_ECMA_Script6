@@ -18,7 +18,11 @@ class NegociacaoController {
 			.then(dao => dao.listaTodos())
 			.then(negociacoes => 
 					negociacoes.forEach((neg) => 
-							this._listaNegociacoes.adiciona(neg)));
+							this._listaNegociacoes.adiciona(neg)))
+			.catch(err => {
+				console.log(err);
+				this._message = "Erro ao carregar listagem";
+			}); 
 	}
 
 	adiciona(event) {
@@ -54,7 +58,15 @@ class NegociacaoController {
 	}
 
 	limpar() {
-		this._listaNegociacoes.clear();
+		ConnectionFactory
+			.getConnection()
+			.then(con => new NegociacaoDao(con))
+			.then(dao => dao.apagarTodos())
+			.then(message => { 
+				this._message.text = message;
+				this._listaNegociacoes.clear();
+			})
+			.catch(err => this._message.text = err);
 	}
 
 	ordena(coluna) {

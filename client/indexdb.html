@@ -48,22 +48,22 @@
         // }
 
 
-        // function lista() {
-        //     let objectStore = db
-        //         .transaction("negociacoes", "readwrite")
-        //         .objectStore("negociacoes");
+        function lista() {
+            let objectStore = db
+                .transaction("negociacoes", "readwrite")
+                .objectStore("negociacoes");
 
-        //     objectStore.openCursor()
-        //         .onsuccess = e => {
-        //             let cursor = e.target.result;
-        //             if (cursor) {
-        //                 console.log(cursor.value);
-        //                 cursor.continue();
-        //             } else {
-        //                 console.log('Fim da listagem');
-        //             }
-        //         }
-        // }
+            objectStore.openCursor()
+                .onsuccess = e => {
+                    let cursor = e.target.result;
+                    if (cursor) {
+                        console.log(cursor.value);
+                        cursor.continue();
+                    } else {
+                        console.log('Fim da listagem');
+                    }
+                }
+        }
 
 
     </script>

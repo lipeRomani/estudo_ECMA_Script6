@@ -52,4 +52,20 @@ class NegociacaoDao {
         });
     }
 
+    apagarTodos() {
+        return new Promise((resolve, reject) => {
+            let request = this._connection
+                .transaction([this._store], "readwrite")
+                .objectStore(this._store)
+                .clear();
+            
+            request.onsuccess = event => resolve("Negociações apagadas com sucesso");
+
+            request.onerror = event => {
+                console.log(event.target.error);
+                reject("Erro ao apagar as negociações");
+            }
+        });
+    }
+
 }

@@ -19,6 +19,9 @@ class DateHelper {
 	}
 
 	static dateToText(data){
-		return `${data.getDate()}/${data.getMonth() + 1}/${data.getFullYear()}`;
+		let monthDate = data.getMonth() + 1;
+		let dia = /^\d{1}$/.test(data.getDate()) ? `0${data.getDate()}` : data.getDate();
+		let mes = /^\d{1}$/.test(monthDate) ? `0${monthDate}` : monthDate;
+		return `${dia}/${mes}/${data.getFullYear()}`;
 	}
 }
