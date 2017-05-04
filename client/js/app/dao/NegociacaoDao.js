@@ -25,4 +25,31 @@ class NegociacaoDao {
         });
     }
 
+    listaTodos() {
+        return new Promise((resolve, reject) => {
+            let cursor = this._connection
+                .transaction([this._store], "readwrite")
+                .objectStore(this._store)
+                .openCursor();
+
+                let negociacoes = [];
+
+                cursor.onsuccess = e => {
+                    let cursor = e.target.result;
+                    if (cursor) {
+                        let obj = cursor.value;
+                        negociacoes.push(new Negociacao(new Date(obj._data), obj._quantidade, obj._valor));
+                        cursor.continue();
+                    } else {
+                        resolve(negociacoes);
+                    }
+                }
+
+                cursor.onerror = e => {
+                    console.log(e.target.error);
+                    reject("Erro ao pegar dados para listagem");
+                }
+        });
+    }
+
 }

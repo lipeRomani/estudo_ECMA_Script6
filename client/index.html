@@ -65,22 +65,6 @@
   <script type="text/javascript">
       var negociacaoController = new NegociacaoController();
       var contador = new ContadorController("#conta");
-
-      ConnectionFactory.getConnection()
-        .then(connection => {
-            new NegociacaoDao(connection)
-                .adiciona(new Negociacao(new Date(), 10, 9999))
-                .then(() => {
-                    alert("Negociacao inserida com sucesso")
-                })
-                .catch(err => {
-                    alert(err);
-                });
-        })
-        .catch(err => {
-            console.log(`Erro ocorreu: ${err}`);
-        })
-
   </script>
 </body>
 </html>
